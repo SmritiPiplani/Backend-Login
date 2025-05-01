@@ -38,10 +38,10 @@ export const sendOtp = async (req, res) => {
       // 1. Generate OTP
       const otp = Math.floor(100000 + Math.random() * 900000);
   
-      // 2. Set OTP expiration time to 5 minutes from now
-      const otpExpiration = new Date(Date.now() + 2 * 60 * 1000); // 5 minutes
+      // 2. Set OTP expiration time 
+      const otpExpiration = new Date(Date.now() + 2 * 60 * 1000); 
   
-      // 3. Store OTP and expiration date in MongoDB
+      // 3. Store OTP and expiration date
       let user = await User.findOne({ email });
       if (!user) {
         // Create a new user if it doesn't exist
@@ -53,13 +53,13 @@ export const sendOtp = async (req, res) => {
         await user.save();
       }
   
-      // 4. Send OTP email
+      //  Send OTP email
       await sendOtpEmail(email, otp);
   
-      // 5. Send success response with OTP expiration in human-readable format
+     
       res.status(200).json({
         message: 'OTP sent successfully!',
-        otpExpiration: otpExpiration.toLocaleString(), // Display expiration in human-readable format
+        otpExpiration: otpExpiration.toLocaleString(),
       });
     } catch (error) {
       res.status(500).json({ message: 'Failed to send OTP', error });
@@ -76,7 +76,7 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
-    // Clear OTP
+    
     user.otp = undefined;
     user.otpExpiration = undefined;
     await user.save();
@@ -85,7 +85,7 @@ export const verifyOtp = async (req, res) => {
       expiresIn: '1h',
     });
 
-    res.cookie('token', token, { httpOnly: true, secure: false });
+    res.cookie('token', token, { httpOnly: true });
     res.status(200).json({ message: 'OTP verified successfully' });
   } catch (error) {
     console.error('Verify OTP error:', error);
@@ -114,7 +114,7 @@ export const login = async (req, res) => {
       expiresIn: '1h',
     });
 
-    res.cookie('token', token, { httpOnly: true, secure: false });
+    res.cookie('token', token, { httpOnly: true });
     res.status(200).json({ message: 'Logged in successfully' });
   } catch (error) {
     console.error('Login error:', error);
@@ -125,7 +125,7 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
     try {
       // Clear the token cookie
-      res.clearCookie('token', { httpOnly: true, secure: false }); // secure: true if using https
+      res.clearCookie('token', { httpOnly: true }); 
       
       res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
