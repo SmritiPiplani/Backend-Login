@@ -3,9 +3,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import AuthRouter from './routes/Auth.js';
-
 dotenv.config();
-
 const app = express();
 
 // Middleware setup
