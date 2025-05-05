@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import AuthRouter from './routes/Auth.js';
+<<<<<<< HEAD
 import { seedAdmin } from './seedAdmin.js';
 
+=======
+>>>>>>> 3fc82d0a93ab97e60458b9e87ed0ad78ccfc70a1
 dotenv.config();
-
 const app = express();
 
 // Middleware setup
