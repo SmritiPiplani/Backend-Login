@@ -7,7 +7,7 @@ export const authorizeRoles = (...allowedRoles) => {
         return res.status(403).json({ message: 'Access denied' });
       }
   
-      next();
+      next(); 
     };
   };
   
