@@ -38,15 +38,11 @@ export const sendOtp = async (req, res) => {
       // 1. Generate OTP
       const otp = Math.floor(100000 + Math.random() * 900000);
   
-<<<<<<< HEAD
-      // 2. Set OTP expiration time to 2 minutes from now
-      const otpExpiration = new Date(Date.now() + 2 * 60 * 1000); // 5 minutes
-=======
-      // 2. Set OTP expiration time 
-      const otpExpiration = new Date(Date.now() + 2 * 60 * 1000); 
->>>>>>> 3fc82d0a93ab97e60458b9e87ed0ad78ccfc70a1
+
+// 2. Set OTP expiration time to 2 minutes from now
+const otpExpiration = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes
   
-      // 3. Store OTP and expiration date
+      // 3. Store OTP and expiration date in MongoDB
       let user = await User.findOne({ email });
       if (!user) {
         // Create a new user if it doesn't exist
@@ -58,13 +54,13 @@ export const sendOtp = async (req, res) => {
         await user.save();
       }
   
-      //  Send OTP email
+      // 4. Send OTP email
       await sendOtpEmail(email, otp);
   
-     
+      // 5. Send success response with OTP expiration in human-readable format
       res.status(200).json({
         message: 'OTP sent successfully!',
-        otpExpiration: otpExpiration.toLocaleString(),
+        otpExpiration: otpExpiration.toLocaleString(), // Display expiration in human-readable format
       });
     } catch (error) {
       res.status(500).json({ message: 'Failed to send OTP', error });
@@ -81,7 +77,7 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
-    
+    // Clear OTP
     user.otp = undefined;
     user.otpExpiration = undefined;
     await user.save();
@@ -90,11 +86,7 @@ export const verifyOtp = async (req, res) => {
       expiresIn: '1h',
     });
 
-<<<<<<< HEAD
-    res.cookie('token', token, { httpOnly: true ,secure:false });
-=======
-    res.cookie('token', token, { httpOnly: true });
->>>>>>> 3fc82d0a93ab97e60458b9e87ed0ad78ccfc70a1
+res.cookie('token', token, { httpOnly: true, secure: false });
     res.status(200).json({ message: 'OTP verified successfully' });
   } catch (error) {
     console.error('Verify OTP error:', error);
@@ -123,11 +115,7 @@ export const login = async (req, res) => {
       expiresIn: '1h',
     });
 
-<<<<<<< HEAD
-    
-=======
-    res.cookie('token', token, { httpOnly: true });
->>>>>>> 3fc82d0a93ab97e60458b9e87ed0ad78ccfc70a1
+res.cookie('token', token, { httpOnly: true, secure: false });
     res.status(200).json({ message: 'Logged in successfully' });
   } catch (error) {
     console.error('Login error:', error);
@@ -138,21 +126,25 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
     try {
       // Clear the token cookie
-<<<<<<< HEAD
-      res.clearCookie('token', { httpOnly: true,secure: false}); 
-=======
-      res.clearCookie('token', { httpOnly: true }); 
->>>>>>> 3fc82d0a93ab97e60458b9e87ed0ad78ccfc70a1
+res.clearCookie('token', { httpOnly: true, secure: false }); 
       
       res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Error logging out' });
     }
   };
-<<<<<<< HEAD
+
 export const protectedRoute = (req, res) => {
   res.status(200).json({ message: 'protected route', user: req.user });
-  };
-=======
-  
->>>>>>> 3fc82d0a93ab97e60458b9e87ed0ad78ccfc70a1
+};
+
+import User from '../models/User.js';
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password -otp -otpExpiration'); // hide sensitive data
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to get users', error });
+  }
+};
