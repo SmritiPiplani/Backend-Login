@@ -1,5 +1,5 @@
-import bcrypt from 'bcryptjs';
 import User from './models/User.js';
+import bcrypt from 'bcryptjs';
 
 export const seedAdmin = async () => {
   const existingAdmin = await User.findOne({ email: 'smritipiplani16@gmail.com' });

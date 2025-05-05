@@ -138,7 +138,7 @@ export const protectedRoute = (req, res) => {
   res.status(200).json({ message: 'protected route', user: req.user });
 };
 
-import User from '../models/User.js';
+
 
 export const getAllUsers = async (req, res) => {
   try {
