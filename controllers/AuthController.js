@@ -134,11 +134,6 @@ res.clearCookie('token', { httpOnly: true, secure: false });
     }
   };
 
-export const protectedRoute = (req, res) => {
-  res.status(200).json({ message: 'protected route', user: req.user });
-};
-
-
 
 export const getAllUsers = async (req, res) => {
   try {
