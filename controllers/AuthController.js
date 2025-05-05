@@ -38,7 +38,7 @@ export const sendOtp = async (req, res) => {
       // 1. Generate OTP
       const otp = Math.floor(100000 + Math.random() * 900000);
   
-      // 2. Set OTP expiration time to 5 minutes from now
+      // 2. Set OTP expiration time to 2 minutes from now
       const otpExpiration = new Date(Date.now() + 2 * 60 * 1000); // 5 minutes
   
       // 3. Store OTP and expiration date in MongoDB
@@ -81,11 +81,11 @@ export const verifyOtp = async (req, res) => {
     user.otpExpiration = undefined;
     await user.save();
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email: user.email , role: user.role  }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 
-    res.cookie('token', token, { httpOnly: true, secure: false });
+    res.cookie('token', token, { httpOnly: true ,secure:false });
     res.status(200).json({ message: 'OTP verified successfully' });
   } catch (error) {
     console.error('Verify OTP error:', error);
@@ -110,11 +110,11 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials!' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id ,role: user.role}, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 
-    res.cookie('token', token, { httpOnly: true, secure: false });
+    
     res.status(200).json({ message: 'Logged in successfully' });
   } catch (error) {
     console.error('Login error:', error);
@@ -125,11 +125,13 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
     try {
       // Clear the token cookie
-      res.clearCookie('token', { httpOnly: true, secure: false }); // secure: true if using https
+      res.clearCookie('token', { httpOnly: true,secure: false}); 
       
       res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Error logging out' });
     }
   };
-  
+export const protectedRoute = (req, res) => {
+  res.status(200).json({ message: 'protected route', user: req.user });
+  };

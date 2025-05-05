@@ -9,7 +9,12 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true, // Optional if you're supporting OTP-only login
+    required: true, 
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'], 
+    default: 'user',
   },
   otp: {
     type: String,
