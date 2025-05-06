@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(authMiddleware, authorizeRoles('admin'));
 
 // Admin routes
-router.delete('/delete/:id', deleteUser);
-router.put('/update/:id', updateUser);
+router.delete('/delete/:_id', deleteUser);
+router.put('/update/:_id', updateUser);
 
 export default router;

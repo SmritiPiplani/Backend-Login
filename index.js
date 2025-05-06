@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import AuthRouter from './routes/Auth.js';
 import { seedAdmin } from './seedAdmin.js';
-
+import AdminRoutes from './routes/admin.js';
 
 dotenv.config();
 const app = express();
@@ -15,6 +15,7 @@ app.use(cookieParser());  // For parsing cookies
 
 // Routes setup
 app.use('/api/auth', AuthRouter);
+app.use('/admin', AdminRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
