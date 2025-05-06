@@ -139,7 +139,7 @@ export const protectedRoute = (req, res) => {
 };
 
 
-// GET ALL USERS (ADMIN ONLY)
+
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password -otp -otpExpiration'); // hide sensitive data
