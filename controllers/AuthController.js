@@ -157,7 +157,7 @@ export const deleteUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Error deleting user', error: err });
   }
-};
+}; 
 
 export const updateUser = async (req, res) => {
   try {
