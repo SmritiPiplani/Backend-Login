@@ -2,28 +2,19 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true, 
-  },
+  email: String,
+  password: String,
   role: {
     type: String,
-    enum: ['user', 'admin'], 
-    default: 'user',
+    enum: ['user', 'admin'],
+    default: 'user'
   },
-  otp: {
-    type: String,
-    required: false,
+  isBlocked: {
+    type: Boolean,
+    default: false
   },
-  otpExpiration: {
-    type: Date,
-    required: false,
-  }
+  otp: String,
+  otpExpiration: Date
 });
 
 const User = mongoose.model('User', userSchema);

@@ -77,10 +77,10 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
-    // Clear OTP
-    user.otp = undefined;
-    user.otpExpiration = undefined;
-    await user.save();
+  await User.updateOne(
+    { email },
+    { $unset: { otp: 1, otpExpiration: 1 } }
+  );
 
     const token = jwt.sign({ email: user.email , role: user.role  }, process.env.JWT_SECRET, {
       expiresIn: '1h',
@@ -159,12 +159,29 @@ export const deleteUser = async (req, res) => {
   }
 }; 
 
-export const updateUser = async (req, res) => {
+export const blockUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params._id, req.body, { new: true });
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json({ message: 'User updated successfully', user });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating user', error: err });
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { isBlocked: true },
+      { new: true }
+    );
+    res.status(200).json({ message: 'User blocked', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to block user' });
   }
 };
+
+export const unblockUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { isBlocked: false },
+      { new: true }
+    );
+    res.status(200).json({ message: 'User unblocked', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to unblock user' });
+  }
+};
+

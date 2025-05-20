@@ -7,6 +7,7 @@ import { seedAdmin } from './seedAdmin.js';
 import AdminRoutes from './routes/admin.js';
 import blogRoutes from './routes/BlogRoutes.js';
 
+
 dotenv.config();
 const app = express();
 
