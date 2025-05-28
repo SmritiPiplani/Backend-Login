@@ -14,6 +14,7 @@ const app = express();
 // Middleware setup
 app.use(express.json());  // For parsing JSON bodies
 app.use(cookieParser());  // For parsing cookies
+app.use(express.urlencoded({ extended: true }));
 
 // Routes setup
 app.use('/api/auth', AuthRouter);

@@ -3,14 +3,31 @@ import Blog from '../models/Blogs.js';
 // Create Blog
 export const createBlog = async (req, res) => {
   try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Only admin can create blogs' });
+    }
+
     const { title, content } = req.body;
-    const blog = new Blog({ title, content, author: req.user.userId });
+    const image = req.file?.path; // Uploaded via Cloudinary middleware
+
+    const blog = new Blog({
+      title,
+      content,
+      image,
+      author: req.user.userId, // Store author as ObjectId
+    });
+
     await blog.save();
-    res.status(201).json({ message: 'Blog created', blog });
+    res.status(201).json({ message: 'Blog created successfully', blog });
   } catch (error) {
-    res.status(500).json({ message: 'Error creating blog', error });
-  }
+  console.error('Upload error:', error.stack || error);
+  res.status(500).json({
+    message: 'Something went wrong',
+    error: error.message || 'Internal server error',
+  });
+}
 };
+
 
 // Update Blog
 export const updateBlog = async (req, res) => {
