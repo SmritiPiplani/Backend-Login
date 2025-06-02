@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', getAllBlogs);
 
 // Admin-only routes
-router.post('/', authMiddleware, authorizeRoles('admin'), upload.single('image'), createBlog);
+router.post('/', authMiddleware, authorizeRoles('admin'), upload.array('image'), createBlog);
 router.put('/:id', authMiddleware, authorizeRoles('admin'), updateBlog);
 router.delete('/:id', authMiddleware, authorizeRoles('admin'), deleteBlog);
 

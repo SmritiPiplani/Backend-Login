@@ -1,5 +1,5 @@
 import Blog from '../models/Blogs.js';
-import fs from 'fs';
+
 import cloudinary from '../utils/cloudinary.js';
 // Create Blog
 export const createBlog = async (req, res) => {
@@ -9,12 +9,12 @@ export const createBlog = async (req, res) => {
     }
 
     const { title, content } = req.body;
-    const image = req.file?.path; // Image URL from Cloudinary
+    const imageUrls = req.files?.map(file => file.path) || [];
 
     const blog = new Blog({
       title,
       content,
-      image,
+      images: imageUrls,
       author: req.user.userId,
     });
 
