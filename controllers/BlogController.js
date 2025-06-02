@@ -1,5 +1,6 @@
 import Blog from '../models/Blogs.js';
-
+import fs from 'fs';
+import cloudinary from '../utils/cloudinary.js';
 // Create Blog
 export const createBlog = async (req, res) => {
   try {
@@ -8,24 +9,24 @@ export const createBlog = async (req, res) => {
     }
 
     const { title, content } = req.body;
-    const image = req.file?.path; // Uploaded via Cloudinary middleware
+    const image = req.file?.path; // Image URL from Cloudinary
 
     const blog = new Blog({
       title,
       content,
       image,
-      author: req.user.userId, // Store author as ObjectId
+      author: req.user.userId,
     });
 
     await blog.save();
     res.status(201).json({ message: 'Blog created successfully', blog });
   } catch (error) {
-  console.error('Upload error:', error.stack || error);
-  res.status(500).json({
-    message: 'Something went wrong',
-    error: error.message || 'Internal server error',
-  });
-}
+    console.error('Upload error:', error.stack || error);
+    res.status(500).json({
+      message: 'Something went wrong',
+      error: error?.message || 'Internal server error',
+    });
+  }
 };
 
 

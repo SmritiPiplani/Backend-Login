@@ -3,11 +3,11 @@ import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../utils/cloudinary.js';
 
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
+  cloudinary,
   params: {
-    folder: 'blogs',
-    allowed_formats: ['jpg', 'png', 'jpeg'],
-    resource_type: 'image',
+    folder: 'new', // Folder in Cloudinary
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+    public_id: (req, file) => `${Date.now()}-${file.originalname.split('.')[0]}`,
   },
 });
 
