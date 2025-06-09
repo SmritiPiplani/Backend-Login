@@ -2,6 +2,7 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendOtpEmail } from '../middlewares/emailConfig.js';
+import logger from '../utils/logger.js';
 
 // REGISTER NEW USER
 export const register = async (req, res) => {
@@ -25,7 +26,7 @@ export const register = async (req, res) => {
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    console.error('Register error:', error);
+    logger.error('Register error:', error);
     res.status(500).json({ message: 'Error registering user' });
   }
 };
@@ -89,7 +90,7 @@ export const verifyOtp = async (req, res) => {
 res.cookie('token', token, { httpOnly: true, secure: false });
     res.status(200).json({ message: 'OTP verified successfully' });
   } catch (error) {
-    console.error('Verify OTP error:', error);
+    logger.error('Verify OTP error:', error);
     res.status(500).json({ message: 'Error verifying OTP' });
   }
 };
@@ -118,7 +119,7 @@ export const login = async (req, res) => {
 res.cookie('token', token, { httpOnly: true, secure: false });
     res.status(200).json({ message: 'Logged in successfully' });
   } catch (error) {
-    console.error('Login error:', error);
+    logger.error('Login error:', error);
     res.status(500).json({ message: 'Error logging in' });
   }
 };

@@ -1,7 +1,8 @@
-import User from './models/User.js';
+import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
+import logger from './logger.js';
 
-export const seedAdmin = async () => {
+const seedAdmin = async () => {
   const existingAdmin = await User.findOne({ email: 'smritipiplani16@gmail.com' });
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash('admin1234', 10);
@@ -10,8 +11,9 @@ export const seedAdmin = async () => {
       password: hashedPassword,
       role: 'admin',
     });
-    console.log('Admin user seeded');
+    logger.log('Admin user seeded');
   } else {
     console.log('Admin already exists');
   }
 };
+export default seedAdmin;

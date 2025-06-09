@@ -1,4 +1,5 @@
 import Blog from '../models/Blogs.js';
+import logger from '../utils/logger.js';
 
 import cloudinary from '../utils/cloudinary.js';
 // Create Blog
@@ -21,10 +22,17 @@ export const createBlog = async (req, res) => {
     await blog.save();
     res.status(201).json({ message: 'Blog created successfully', blog });
   } catch (error) {
-    console.error('Upload error:', error.stack || error);
+    logger.error('Blog creation failed', {
+      message: error.message,
+      stack: error.stack,
+      route: req.originalUrl,
+      body: req.body,
+      user: req.user?.userId,
+    });
+
     res.status(500).json({
       message: 'Something went wrong',
-      error: error?.message || 'Internal server error',
+      error: error.message,
     });
   }
 };
