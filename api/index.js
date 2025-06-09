@@ -13,22 +13,30 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-let isSeeded = false;
+let seeded = false;
+let dbReady = false;
 
 app.use(async (req, res, next) => {
   try {
-    await connectToDatabase(process.env.MONGODB_URI);
+    if (!dbReady) {
+      await connectToDatabase(process.env.MONGODB_URI);
+      dbReady = true;
+    }
 
-    if (!isSeeded) {
+    if (!seeded) {
       await seedAdmin();
-      isSeeded = true;
+      seeded = true;
     }
 
     next();
   } catch (error) {
-    console.error('❌ DB connection or seeding error:', error);
-    res.status(500).send('Internal Server Error: DB failed');
+    console.error('❌ Init failed:', error);
+    res.status(500).send('Server initialization failed');
   }
+});
+
+app.get('/api/test', (req, res) => {
+  res.send('✅ It works!');
 });
 
 

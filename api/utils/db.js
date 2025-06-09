@@ -7,15 +7,14 @@ if (!cached) {
 }
 
 async function connectToDatabase(uri) {
-  if (cached.conn) {
-    return cached.conn;
-  }
+  if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(uri).then((mongoose) => {
-      return mongoose;
+    cached.promise = mongoose.connect(uri, {
+      bufferCommands: false,
     });
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }
