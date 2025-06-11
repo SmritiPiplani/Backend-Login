@@ -6,13 +6,16 @@ import logger from './utils/logger.js'; // ✅ Import logger
 import userRoutes from './routes/Auth.js';
 import blogRoutes from './routes/BlogRoutes.js';
 import adminRoutes from './routes/admin.js';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
